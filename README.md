@@ -1,4 +1,4 @@
-# holy_bible
+# HolyBible
 
 A new Flutter project.
 
