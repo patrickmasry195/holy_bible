@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:holy_bible/constants.dart';
 import 'package:holy_bible/widgets/custom_button.dart';
 
-class GospelsPage extends StatelessWidget {
-  const GospelsPage({super.key});
+class ChaptersPage extends StatelessWidget {
+  const ChaptersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class GospelsPage extends StatelessWidget {
         title: Align(
           alignment: Alignment.topRight,
           child: Text(
-            'الاناجيل',
+            'الاصحاحات',
             style: GoogleFonts.balooBhaijaan2(
               fontSize: 24,
             ),
@@ -24,7 +24,7 @@ class GospelsPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => context.go('/testaments'),
+            onPressed: () => context.go('/gospels'),
             icon: const Icon(
               Icons.arrow_forward,
               color: Colors.black,
@@ -34,27 +34,23 @@ class GospelsPage extends StatelessWidget {
         ],
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 30,
-        ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 2,
-        ),
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return CustomButton(
-            onTap: () => context.go('/chapters'),
-            text: 'التكوين',
-            height: 70,
-            width: 100,
-            fontSize: 20,
-          );
-        },
-      ),
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          itemCount: 30,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 17,
+          ),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomButton(
+                onTap: () => context.go('/chapter'),
+                text: '1',
+                fontSize: 24,
+              ),
+            );
+          }),
     );
   }
 }
