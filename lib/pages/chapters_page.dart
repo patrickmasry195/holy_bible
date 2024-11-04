@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:holy_bible/constants.dart';
 import 'package:holy_bible/widgets/custom_button.dart';
 
@@ -17,9 +16,7 @@ class ChaptersPage extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Text(
             'الاصحاحات',
-            style: GoogleFonts.balooBhaijaan2(
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         actions: [
@@ -47,7 +44,6 @@ class ChaptersPage extends StatelessWidget {
               child: CustomButton(
                 onTap: () => context.go('/chapter'),
                 text: '1',
-                fontSize: 24,
               ),
             );
           }),

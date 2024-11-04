@@ -16,9 +16,8 @@ class TestamentsPage extends StatelessWidget {
               flex: 7,
             ),
             CustomButton(
-              onTap: () => context.go('/gospels'),
+              onTap: () => context.go('/gospels?testament=Old Testament'),
               text: 'العهد القديم',
-              fontSize: 20,
               height: 100,
               width: 150,
             ),
@@ -26,9 +25,8 @@ class TestamentsPage extends StatelessWidget {
               flex: 1,
             ),
             CustomButton(
-              onTap: () => context.go('/gospels'),
+              onTap: () => context.go('/gospels?testament=New Testament'),
               text: 'العهد الجديد',
-              fontSize: 20,
               height: 100,
               width: 150,
             ),

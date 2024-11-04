@@ -29,6 +29,7 @@ class _ChapterPageState extends State<ChapterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shadowColor: kBackgroundColor,
         backgroundColor: kBackgroundColor,
         leading: IconButton(
           onPressed: () => context.go('/gospels'),
@@ -117,8 +118,8 @@ class _ChapterPageState extends State<ChapterPage> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return Text(
-                        textAlign: TextAlign.end,
-                        '''لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود تيمبور
+                      textAlign: TextAlign.end,
+                      '''لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود تيمبور
 
 أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
 
@@ -129,9 +130,10 @@ class _ChapterPageState extends State<ChapterPage> {
 نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
 
 كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.''',
-                        style: GoogleFonts.amiri(
-                          fontSize: textSize,
-                        ));
+                      style: GoogleFonts.amiri(
+                        fontSize: textSize,
+                      ),
+                    );
                   }),
             ),
           )

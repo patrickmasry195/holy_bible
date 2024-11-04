@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -7,14 +6,12 @@ class CustomButton extends StatelessWidget {
     required this.text,
     this.height,
     this.width,
-    required this.fontSize,
     this.onTap,
   });
 
   final String text;
   final double? height;
   final double? width;
-  final double fontSize;
   final void Function()? onTap;
 
   @override
@@ -31,9 +28,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: GoogleFonts.balooBhaijaan2(
-              fontSize: fontSize,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
       ),

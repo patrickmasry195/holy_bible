@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:holy_bible/constants.dart';
+import 'package:holy_bible/cubits/gospels_cubit/gospels_cubit.dart';
 import 'package:holy_bible/widgets/custom_button.dart';
 
 class GospelsPage extends StatelessWidget {
-  const GospelsPage({super.key});
+  final String? testamentType;
+
+  const GospelsPage({super.key, this.testamentType});
 
   @override
   Widget build(BuildContext context) {
+    if (testamentType != null) {
+      context.read<GospelsCubit>().fetchGospels(testamentType!);
+    }
     return Scaffold(
       appBar: AppBar(
         shadowColor: kBackgroundColor,
@@ -17,14 +23,12 @@ class GospelsPage extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Text(
             'الاناجيل',
-            style: GoogleFonts.balooBhaijaan2(
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         actions: [
           IconButton(
-            onPressed: () => context.go('/testaments'),
+            onPressed: () => context.go('/'),
             icon: const Icon(
               Icons.arrow_forward,
               color: Colors.black,
@@ -33,26 +37,40 @@ class GospelsPage extends StatelessWidget {
           )
         ],
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 30,
-        ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 2,
-        ),
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return CustomButton(
-            onTap: () => context.go('/chapters'),
-            text: 'التكوين',
-            height: 70,
-            width: 100,
-            fontSize: 20,
-          );
+      body: BlocBuilder<GospelsCubit, GospelsState>(
+        builder: (context, state) {
+          if (state is GospelsLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is GospelsSuccessState) {
+            return Directionality(
+              textDirection: TextDirection.rtl,
+              child: GridView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 30,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
+                  childAspectRatio: 2,
+                ),
+                itemCount: state.gospels.length,
+                itemBuilder: (context, index) {
+                  return CustomButton(
+                    onTap: () => context.go('/chapters'),
+                    text: state.gospels[index].name,
+                    height: 70,
+                    width: 100,
+                  );
+                },
+              ),
+            );
+          } else if (state is GospelsFailureState) {
+            return Center(child: Text('Error: ${state.errorMessage}'));
+          } else {
+            return const Center(child: Text('No Gospels found.'));
+          }
         },
       ),
     );
