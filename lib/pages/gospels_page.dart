@@ -40,7 +40,10 @@ class GospelsPage extends StatelessWidget {
       body: BlocBuilder<GospelsCubit, GospelsState>(
         builder: (context, state) {
           if (state is GospelsLoadingState) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Colors.black,
+            ));
           } else if (state is GospelsSuccessState) {
             return Directionality(
               textDirection: TextDirection.rtl,
@@ -58,7 +61,8 @@ class GospelsPage extends StatelessWidget {
                 itemCount: state.gospels.length,
                 itemBuilder: (context, index) {
                   return CustomButton(
-                    onTap: () => context.go('/chapters'),
+                    onTap: () => context
+                        .go('/chapters?bookId=${state.gospels[index].id}'),
                     text: state.gospels[index].name,
                     height: 70,
                     width: 100,

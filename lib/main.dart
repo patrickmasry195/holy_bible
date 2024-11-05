@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:holy_bible/constants.dart';
+import 'package:holy_bible/cubits/chapters_cubit/chapters_cubit.dart';
 import 'package:holy_bible/cubits/gospels_cubit/gospels_cubit.dart';
 import 'package:holy_bible/pages/chapter_page.dart';
 import 'package:holy_bible/pages/chapters_page.dart';
 import 'package:holy_bible/pages/gospels_page.dart';
 import 'package:holy_bible/pages/testaments_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:holy_bible/services/get_chapters.dart';
 import 'package:holy_bible/services/get_gospels.dart';
 
 void main() {
@@ -23,6 +25,8 @@ class HolyBible extends StatelessWidget {
       providers: [
         BlocProvider<GospelsCubit>(
             create: (context) => GospelsCubit(GetGospels())),
+        BlocProvider<ChaptersCubit>(
+            create: (context) => ChaptersCubit(GetChapters())),
       ],
       child: MaterialApp.router(
         theme: ThemeData(
@@ -62,7 +66,12 @@ class HolyBible extends StatelessWidget {
       ),
       GoRoute(
         path: '/chapters',
-        builder: (context, state) => const ChaptersPage(),
+        builder: (context, state) {
+          final bookId = state.uri.queryParameters['bookId'];
+          return ChaptersPage(
+            bookId: bookId,
+          );
+        },
         name: 'ChaptersPage',
       ),
       GoRoute(
