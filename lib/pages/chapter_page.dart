@@ -11,19 +11,21 @@ class ChapterPage extends StatefulWidget {
 }
 
 class _ChapterPageState extends State<ChapterPage> {
-  String dropDownValue = 'التكوين 1'; // Move outside build method
-
-  var items = [
-    'التكوين 1',
-    'التكوين 2',
-    'التكوين 3',
-    'التكوين 4',
-    'التكوين 5',
-  ];
-
   double textSize = 16;
-  final double maxTextSize = 24;
-  final double minTextSize = 14;
+  final double maxTextSize = 40;
+  final double minTextSize = 16;
+  String chapterText =
+      '''لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود تيمبور
+
+أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
+
+أكسير سيتاشن يللأمكو لابورأس نيسي يت أليكيوب أكس أيا كوممودو كونسيكيوات . ديواس
+
+أيوتي أريري دولار إن ريبريهينديرأيت فوليوبتاتي فيلايت أيسسي كايلليوم دولار أيو فيجايت
+
+نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
+
+كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.''';
 
   @override
   Widget build(BuildContext context) {
@@ -39,41 +41,17 @@ class _ChapterPageState extends State<ChapterPage> {
             size: 30,
           ),
         ),
-        title: Container(
-          height: 50,
-          width: 200,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                isExpanded: true,
-                iconSize: 40,
-                icon: const Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: Colors.black,
-                ),
-                value: dropDownValue,
-                items: items.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Center(
-                      child: Text(
-                        items,
-                        style: GoogleFonts.balooBhaijaan2(
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropDownValue = newValue!;
-                  });
-                },
+        title: Center(
+          child: Container(
+            height: 40,
+            width: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+            ),
+            child: const Center(
+              child: Text(
+                'التكوين 1',
               ),
             ),
           ),
@@ -109,34 +87,50 @@ class _ChapterPageState extends State<ChapterPage> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Text(
-                      textAlign: TextAlign.end,
-                      '''لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود تيمبور
-
-أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
-
-أكسير سيتاشن يللأمكو لابورأس نيسي يت أليكيوب أكس أيا كوممودو كونسيكيوات . ديواس
-
-أيوتي أريري دولار إن ريبريهينديرأيت فوليوبتاتي فيلايت أيسسي كايلليوم دولار أيو فيجايت
-
-نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
-
-كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.''',
-                      style: GoogleFonts.amiri(
-                        fontSize: textSize,
-                      ),
-                    );
-                  }),
+          SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 120),
+            child: Text(
+              textAlign: TextAlign.end,
+              chapterText,
+              style: GoogleFonts.amiri(
+                fontSize: textSize,
+              ),
             ),
-          )
+          ),
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12, bottom: 24),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 50,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12, bottom: 24),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.black,
+                      size: 50,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

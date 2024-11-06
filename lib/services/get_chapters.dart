@@ -1,45 +1,52 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:holy_bible/models/chapters_model.dart';
+import 'package:hive/hive.dart';
+import 'package:holy_bible/services/get_gospels.dart';
 import 'package:http/http.dart' as http;
+import 'package:holy_bible/models/chapters_model.dart';
 
 class GetChapters {
   final String apiKey = '124eac708179873fd6fbaa8d07e440b6';
   final String bibleId = 'b17e246951402e50-01';
-  final String baseUrl = 'https://api.scripture.api.bible/v1/bibles';
+  final String apiUrl = 'https://api.scripture.api.bible/v1/bibles';
 
-  Future<List<ChaptersModel>> getChapters(String bookId) async {
-    final url = Uri.parse('$baseUrl/$bibleId/books/$bookId/chapters');
+  Future<List<ChaptersModel>> getAllChaptersByTestament(
+      String testamentType) async {
+    final getGospels = GetGospels();
+    final books = await getGospels.getGospelsByTestament(testamentType);
+    List<ChaptersModel> allChapters = [];
 
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          'accept': 'application/json',
-          'api-key': apiKey,
-        },
-      ).timeout(const Duration(seconds: 20));
-
-      if (response.statusCode == 200) {
-        return parseChapters(response.body);
-      } else {
-        log('Failed to load chapters: ${response.statusCode}');
-      }
-    } on TimeoutException catch (e) {
-      log('Request timed out: $e');
-    } catch (e) {
-      log('Error fetching chapters: $e');
+    for (var book in books) {
+      final chapters = await getChaptersByBook(book.id);
+      allChapters.addAll(chapters);
     }
 
-    return [];
+    return allChapters;
   }
 
-  List<ChaptersModel> parseChapters(String responseBody) {
-    final parsed = json.decode(responseBody);
-    return (parsed['data'] as List)
-        .map((json) => ChaptersModel.fromJson(json))
-        .toList();
+  Future<List<ChaptersModel>> getChaptersByBook(String bookId) async {
+    final url = Uri.parse('$apiUrl/$bibleId/books/$bookId/chapters');
+    final headers = {'api-key': apiKey};
+    var box = await Hive.openBox<ChaptersModel>('chapters_$bookId');
+    final storedData = box.values.toList();
+
+    if (storedData.isNotEmpty) {
+      return storedData;
+    }
+
+    try {
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final List chaptersJson = jsonDecode(response.body)['data'];
+        final chapters =
+            chaptersJson.map((json) => ChaptersModel.fromJson(json)).toList();
+        await box.addAll(chapters);
+
+        return chapters;
+      } else {
+        throw Exception('Failed to load chapters');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
   }
 }

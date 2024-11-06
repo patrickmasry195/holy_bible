@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:holy_bible/models/gospels_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,6 +11,16 @@ class GetGospels {
   Future<List<GospelsModel>> getGospelsByTestament(String testamentType) async {
     final url = Uri.parse('$apiUrl/$bibleId/books');
     final headers = {'api-key': apiKey};
+    var box = await Hive.openBox<GospelsModel>('gospels');
+    final storedData = box.values.toList();
+
+    if (storedData.isNotEmpty) {
+      return storedData.where((gospel) {
+        return (testamentType == 'Old Testament' &&
+                _isOldTestament(gospel.id)) ||
+            (testamentType == 'New Testament' && !_isOldTestament(gospel.id));
+      }).toList();
+    }
 
     try {
       final response = await http.get(url, headers: headers);
@@ -23,6 +34,7 @@ class GetGospels {
                   _isOldTestament(gospel.id)) ||
               (testamentType == 'New Testament' && !_isOldTestament(gospel.id));
         }).toList();
+        await box.addAll(gospels);
 
         return filteredGospels;
       } else {

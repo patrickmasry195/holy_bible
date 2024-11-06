@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:holy_bible/constants.dart';
 import 'package:holy_bible/cubits/chapters_cubit/chapters_cubit.dart';
 import 'package:holy_bible/cubits/gospels_cubit/gospels_cubit.dart';
+import 'package:holy_bible/models/chapters_model.dart';
+import 'package:holy_bible/models/gospels_model.dart';
 import 'package:holy_bible/pages/chapter_page.dart';
 import 'package:holy_bible/pages/chapters_page.dart';
 import 'package:holy_bible/pages/gospels_page.dart';
@@ -12,7 +15,11 @@ import 'package:go_router/go_router.dart';
 import 'package:holy_bible/services/get_chapters.dart';
 import 'package:holy_bible/services/get_gospels.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(GospelsModelAdapter());
+  Hive.registerAdapter(ChaptersModelAdapter());
+
   runApp(HolyBible());
 }
 

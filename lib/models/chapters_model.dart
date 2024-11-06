@@ -1,10 +1,23 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 
+part 'chapters_model.g.dart';
+
+@HiveType(typeId: 1)
 class ChaptersModel {
+  @HiveField(0)
   final String id;
+
+  @HiveField(1)
   final String bibleId;
+
+  @HiveField(2)
   final String bookId;
+
+  @HiveField(3)
   final String number;
+
+  @HiveField(4)
   final String reference;
 
   ChaptersModel({

@@ -13,7 +13,7 @@ class ChaptersCubit extends Cubit<ChaptersState> {
   Future<void> fetchChapters(String bookId) async {
     emit(ChaptersLoadingState());
     try {
-      final chapters = await getChapters.getChapters(bookId);
+      final chapters = await getChapters.getChaptersByBook(bookId);
       log('Fetched chapters : $chapters');
       emit(ChaptersSuccessState(chapters));
     } catch (e) {
