@@ -23,7 +23,8 @@ class GetChapters {
     return allChapters;
   }
 
-  Future<List<ChaptersModel>> getChaptersByBook(String bookId) async {
+  Future<List<ChaptersModel>> getChaptersByBook(String bookId,
+      {int retries = 3, int delay = 2}) async {
     final url = Uri.parse('$apiUrl/$bibleId/books/$bookId/chapters');
     final headers = {'api-key': apiKey};
     var box = await Hive.openBox<ChaptersModel>('chapters_$bookId');
@@ -33,20 +34,29 @@ class GetChapters {
       return storedData;
     }
 
-    try {
-      final response = await http.get(url, headers: headers);
-      if (response.statusCode == 200) {
-        final List chaptersJson = jsonDecode(response.body)['data'];
-        final chapters =
-            chaptersJson.map((json) => ChaptersModel.fromJson(json)).toList();
-        await box.addAll(chapters);
-
-        return chapters;
-      } else {
-        throw Exception('Failed to load chapters');
+    int attempt = 0;
+    while (attempt < retries) {
+      try {
+        final response = await http.get(url, headers: headers);
+        if (response.statusCode == 200) {
+          final List chaptersJson = jsonDecode(response.body)['data'];
+          final chapters =
+              chaptersJson.map((json) => ChaptersModel.fromJson(json)).toList();
+          await box.addAll(chapters);
+          return chapters;
+        } else {
+          throw Exception('Failed to load chapters');
+        }
+      } catch (e) {
+        attempt++;
+        if (attempt < retries) {
+          await Future.delayed(Duration(seconds: delay));
+        } else {
+          throw Exception(
+              'Failed to load chapters after $retries attempts: $e');
+        }
       }
-    } catch (e) {
-      throw Exception('Error: $e');
     }
+    throw Exception('Failed to load chapters');
   }
 }

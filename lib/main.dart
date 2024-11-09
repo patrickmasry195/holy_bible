@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:holy_bible/constants.dart';
+import 'package:holy_bible/helper/constants.dart';
+import 'package:holy_bible/cubits/chapter_cubit/chapter_cubit.dart';
 import 'package:holy_bible/cubits/chapters_cubit/chapters_cubit.dart';
 import 'package:holy_bible/cubits/gospels_cubit/gospels_cubit.dart';
+import 'package:holy_bible/models/chapter_model.dart';
 import 'package:holy_bible/models/chapters_model.dart';
 import 'package:holy_bible/models/gospels_model.dart';
 import 'package:holy_bible/pages/chapter_page.dart';
@@ -12,14 +14,15 @@ import 'package:holy_bible/pages/chapters_page.dart';
 import 'package:holy_bible/pages/gospels_page.dart';
 import 'package:holy_bible/pages/testaments_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:holy_bible/services/get_chapter.dart';
 import 'package:holy_bible/services/get_chapters.dart';
 import 'package:holy_bible/services/get_gospels.dart';
 
 void main() async {
-  await Hive.initFlutter();
   Hive.registerAdapter(GospelsModelAdapter());
   Hive.registerAdapter(ChaptersModelAdapter());
-
+  Hive.registerAdapter(ChapterModelAdapter());
+  await Hive.initFlutter();
   runApp(HolyBible());
 }
 
@@ -34,6 +37,8 @@ class HolyBible extends StatelessWidget {
             create: (context) => GospelsCubit(GetGospels())),
         BlocProvider<ChaptersCubit>(
             create: (context) => ChaptersCubit(GetChapters())),
+        BlocProvider<ChapterCubit>(
+            create: (context) => ChapterCubit(GetChapter())),
       ],
       child: MaterialApp.router(
         theme: ThemeData(
@@ -82,8 +87,17 @@ class HolyBible extends StatelessWidget {
         name: 'ChaptersPage',
       ),
       GoRoute(
-        path: '/chapter',
-        builder: (context, state) => const ChapterPage(),
+        path: '/chapter/:chapterId',
+        builder: (context, state) {
+          final chapterId = state.pathParameters['chapterId'];
+          if (chapterId == null || chapterId.isEmpty) {
+            return const Scaffold(
+                body: Center(child: Text('Chapter not found')));
+          }
+          return ChapterPage(
+            chapterId: chapterId,
+          );
+        },
         name: 'ChapterPage',
       ),
     ],

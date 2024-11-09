@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:holy_bible/constants.dart';
+import 'package:holy_bible/helper/constants.dart';
 import 'package:holy_bible/cubits/gospels_cubit/gospels_cubit.dart';
 import 'package:holy_bible/widgets/custom_button.dart';
 

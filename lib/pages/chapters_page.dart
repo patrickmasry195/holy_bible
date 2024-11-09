@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:holy_bible/constants.dart';
+import 'package:holy_bible/helper/constants.dart';
 import 'package:holy_bible/cubits/chapters_cubit/chapters_cubit.dart';
 import 'package:holy_bible/widgets/custom_button.dart';
 
@@ -62,7 +62,12 @@ class ChaptersPage extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CustomButton(
-                        onTap: () => context.go('/chapter'),
+                        onTap: () {
+                          final chapterId = chapter.id;
+                          if (chapterId.isNotEmpty) {
+                            context.go('/chapter/$chapterId');
+                          }
+                        },
                         text: chapter.number,
                       ),
                     );
