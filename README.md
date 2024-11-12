@@ -27,6 +27,10 @@ Bible version used in the app: Biblica® Open New Arabic Version 2012
 [Flutter html](https://pub.dev/packages/flutter_html#data)
 
 [Flutter launcher icons](https://pub.dev/packages/flutter_launcher_icons)
+
+## Video
+Link: https://vimeo.com/1028805934?share=copy
+
 ## Screenshots
 Splash             |  Testaments
 :-------------------------:|:-------------------------:
